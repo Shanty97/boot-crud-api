@@ -1,6 +1,7 @@
 package com.boot.crud.api.services;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,34 +16,43 @@ public class StudentService {
 	@Autowired
 	private MiniStorage miniStorage;
 
-	public StudentService(MiniStorage miniStorage) {
-		miniStorage.create(
-				new Student((int) Math.round(Math.random() * 100), 
-				"John Doe",
-				(int) Math.round(Math.random() * 30) + 1));
-		miniStorage.create(
-				new Student((int) Math.round(Math.random() * 100), 
-				"Drek L", 
-				(int) Math.round(Math.random() * 30) + 1));
-		miniStorage.create(new Student((int) Math.round(Math.random() * 100), 
-				"Jimmy John",
-				(int) Math.round(Math.random() * 30) + 1));
+	public Student addToDatabase(Student data) {
+		return miniStorage.create(data);
 	}
 
-	public void addToDatabase(Student data) {
-		miniStorage.create(data);
+	public List<Student> addAllToDatabase(List<Student> students) {
+		for (Student student : students) {
+			addToDatabase(student);
+		}
+		return students;
+	}
+
+	public Student updateDatabase(Student student) {
+		Student tempStudent = miniStorage.findById(student.getId());
+		if (tempStudent != null) {
+			return miniStorage.create(tempStudent);
+		}
+		return null;
 	}
 
 	public List<Student> filterAll() {
 		return miniStorage.findAll().stream().collect(Collectors.toList());
 	}
 
-	public Student filterById(int id) {
+	public Student filterById(UUID id) {
 		return miniStorage.findById(id);
 	}
-	
+
 	public List<Student> filterByAge(int age) {
 		return miniStorage.findByAge(age);
+	}
+
+	public Student removeStudentById(UUID id) {
+		Student tempStudent = miniStorage.findById(id);
+		if (tempStudent != null) {
+			return miniStorage.removeById(tempStudent.getId());
+		}
+		return null;
 	}
 
 }

@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -19,31 +18,34 @@ import com.boot.crud.api.models.Student;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class MiniStorage {
 
-	private Map<Integer, Student> mapStore = new HashMap<Integer, Student>();
+	private Map<UUID, Student> mapStore = new HashMap<UUID, Student>();
 
-	public void create(Student data) {
-		mapStore.put(data.getId(), data);
+	public Student create(Student data) {
+		return mapStore.put(data.getId(), data);
 	}
-	
+
 	public List<Student> findAll() {
 		return mapStore.values().stream().collect(Collectors.toList());
 	}
-	
-	public Student findById(int id) {
+
+	public Student findById(UUID id) {
 		return mapStore.get(id);
 	}
-	
+
 	public List<Student> findByAge(int age) {
-		
+
 		List<Student> tempStore = new ArrayList<Student>();
-		Set<Integer> keys = mapStore.keySet();
-		for(int key: keys) {
-			if(mapStore.get(key).getAge() == age) {
+		Set<UUID> keys = mapStore.keySet();
+		for (UUID key : keys) {
+			if (mapStore.get(key).getAge() == age) {
 				tempStore.add(mapStore.get(key));
 			}
 		}
 		return tempStore;
 	}
-	
-	
+
+	public Student removeById(UUID id) {
+		return mapStore.remove(id);
+	}
+
 }

@@ -1,24 +1,21 @@
 package com.boot.crud.api.models;
 
+import java.util.UUID;
+
 public class Student {
-	
-	private int id;
+
+	private UUID id;
 	private String name;
 	private int age;
-	
-	public Student(int id, String name, int age) {
-		super();
-		this.id = id;
+
+	public Student(String name, int age) {
+		this.id = UUID.randomUUID();
 		this.name = name;
 		this.age = age;
 	}
 
-	public int getId() {
+	public UUID getId() {
 		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public String getName() {
@@ -41,7 +38,5 @@ public class Student {
 	public String toString() {
 		return "Student [id=" + id + ", name=" + name + ", age=" + age + "]";
 	}
-	
-	
-	
+
 }
