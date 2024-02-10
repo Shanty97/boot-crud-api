@@ -23,6 +23,12 @@ public class MiniStorage {
 	public Student create(Student data) {
 		return mapStore.put(data.getId(), data);
 	}
+	
+	public Student update(Student existingStudent, Student newStudent) {
+		existingStudent.setName(newStudent.getName());
+		existingStudent.setAge(newStudent.getAge());
+		return mapStore.put(existingStudent.getId(), existingStudent);
+	}
 
 	public List<Student> findAll() {
 		return mapStore.values().stream().collect(Collectors.toList());

@@ -98,8 +98,8 @@ public class StudentRequestController {
 	 * 
 	 */
 	@PutMapping("/student/update")
-	public ResponseEntity<Student> updateStudentName(@RequestBody Student student, @RequestParam("name") String name) {
-		Student tempStudent = studentService.updateDatabase(student);
+	public ResponseEntity<Student> updateStudentName(@RequestBody Student newStudent, @RequestParam("id") UUID id) {
+		Student tempStudent = studentService.updateDatabase(newStudent, id);
 		if (tempStudent != null) {
 			return new ResponseEntity<>(tempStudent, HttpStatus.OK);
 		}

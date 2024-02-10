@@ -27,10 +27,10 @@ public class StudentService {
 		return students;
 	}
 
-	public Student updateDatabase(Student student) {
-		Student tempStudent = miniStorage.findById(student.getId());
-		if (tempStudent != null) {
-			return miniStorage.create(tempStudent);
+	public Student updateDatabase(Student newStudent, UUID id) {
+		Student existingStudent = miniStorage.findById(id);
+		if (existingStudent != null) {
+			return miniStorage.update(existingStudent, newStudent);
 		}
 		return null;
 	}

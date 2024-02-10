@@ -1,12 +1,9 @@
 package com.boot.crud.api.storage.tests;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import com.boot.crud.api.models.Student;
-import com.boot.crud.api.storage.MiniStorage;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,9 +11,11 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import com.boot.crud.api.models.Student;
+import com.boot.crud.api.storage.MiniStorage;
 
 public class MiniStorageTests {
 
@@ -167,8 +166,28 @@ public class MiniStorageTests {
 		for (Student s : studentList) {
 			miniStorage.create(s);
 		}
-		
+
 		assertNull(miniStorage.removeById(UUID.randomUUID()));
+	}
+
+	@Test
+	public void updateStudentTest() {
+
+		// Create a test student
+		Student student = new Student("Adam Jones", 24);
+		Student newStudent = new Student("Jason Stathom", 24);
+
+		// Test create
+		miniStorage.create(student);
+
+		// Test update
+		Student updatedStudent = miniStorage.update(student, newStudent);
+
+		// Assert the updated student with the existing student
+		assertNotNull(updatedStudent);
+		assertEquals(student.getId(), updatedStudent.getId());
+		assertEquals(updatedStudent.getName(), "Jason Stathom");
+		assertEquals(updatedStudent.getAge(), 24);
 	}
 
 }
