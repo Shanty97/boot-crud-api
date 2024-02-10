@@ -109,9 +109,8 @@ public class MiniStorageTests {
 
 		List<UUID> searchedStudents = miniStorage.findByAge(20).stream().map(Student::getId).toList();
 
-		assertTrue(searchedStudents.size() <= miniStorage.findAll().size());
-
 		// Assert the searched students using age
+		assertTrue(searchedStudents.size() <= miniStorage.findAll().size());
 		for (UUID s : searchedStudents) {
 			assertNotNull(miniStorage.findById(s));
 		}
@@ -136,11 +135,32 @@ public class MiniStorageTests {
 	}
 
 	@Test
-	public void removeByIdTest() {
+	public void removeByValidIdTest() {
 
 		// Create a test students
-		List<Student> studentList = Arrays.asList(
-				new Student("qwe", 20), new Student("asd", 29),
+		List<Student> studentList = Arrays.asList(new Student("qwe", 20), new Student("asd", 29),
+				new Student("cvb", 23), new Student("nmm", 24));
+
+		// Test create
+		for (Student s : studentList) {
+			miniStorage.create(s);
+		}
+
+		Student removedStudent = miniStorage.removeById(studentList.get(2).getId());
+
+		long occurenceOfRemovedStudent = miniStorage.findAll().stream().filter(m -> m.getId() == removedStudent.getId())
+				.count();
+
+		assertEquals(occurenceOfRemovedStudent, 0);
+		assertNull(miniStorage.removeById(UUID.randomUUID()));
+
+	}
+
+	@Test
+	public void removeByInValidIdTest() {
+
+		// Create a test students
+		List<Student> studentList = Arrays.asList(new Student("qwe", 20), new Student("asd", 29),
 				new Student("cvb", 23), new Student("nmm", 24));
 
 		// Test create
@@ -148,19 +168,7 @@ public class MiniStorageTests {
 			miniStorage.create(s);
 		}
 		
-		Student removedStudent = miniStorage.removeById(studentList.get(2).getId());
-		
-		long occurenceOfRemovedStudent = miniStorage.findAll().stream().filter(m -> m.getId() == removedStudent.getId()).count();
-		
-		assertEquals(occurenceOfRemovedStudent, 0);
-		
-		assertThrows(, miniStorage.removeById(UUID.randomUUID())) ;
-		
-		long occurenceOfRemovedStudent1 = miniStorage.findAll().stream().filter(m -> m.getId() == removedStudent.getId()).count();
-		
-		assertEquals(occurenceOfRemovedStudent, 0);
-		
-		
+		assertNull(miniStorage.removeById(UUID.randomUUID()));
 	}
 
 }
